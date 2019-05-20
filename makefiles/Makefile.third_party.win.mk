@@ -313,9 +313,12 @@ dependencies\sources\protobuf-$(PROTOBUF_TAG)\cmake\build\protobuf.sln: dependen
 	${SED} -i -e '/\"\/MD\"/d' dependencies\sources\protobuf-$(PROTOBUF_TAG)\cmake\CMakeLists.txt
 	cd dependencies\sources\protobuf-$(PROTOBUF_TAG)\cmake\build && "$(CMAKE)" -G $(CMAKE_PLATFORM) -Dprotobuf_BUILD_TESTS=OFF ..
 
-dependencies\sources\protobuf-$(PROTOBUF_TAG)\cmake\CMakeLists.txt:
+dependencies\sources\protobuf-$(PROTOBUF_TAG)\cmake\CMakeLists.txt: dependencies\archives\protobuf-$(PROTOBUF_TAG).zip
+	$(UNZIP) -q -o -d dependencies\sources dependencies\archives\protobuf-$(PROTOBUF_TAG).zip
+
+dependencies\archives\protobuf-$(PROTOBUF_TAG).zip: 
 	$(WGET) --quiet -P dependencies\archives --no-check-certificate https://github.com/google/protobuf/archive/v$(PROTOBUF_TAG).zip
-	$(UNZIP) -q -d dependencies\sources dependencies\archives\v$(PROTOBUF_TAG).zip
+	cd dependencies/archives && rename v$(PROTOBUF_TAG).zip protobuf-$(PROTOBUF_TAG).zip
 
 PROTOBUF_INC = /I"$(WINDOWS_PROTOBUF_PATH)\\include"
 PROTOBUF_SWIG = -I"$(WINDOWS_PROTOBUF_DIR)/include"
@@ -412,9 +415,11 @@ dependencies\sources\Cbc-$(CBC_TAG)\Cbc\MSVisualStudio\v10\$(CBC_PLATFORM)\cbc.e
 
 CBC_ARCHIVE:=https://www.coin-or.org/download/source/Cbc/Cbc-${CBC_TAG}.zip
 
-dependencies\sources\Cbc-$(CBC_TAG)\configure:
+dependencies\sources\Cbc-$(CBC_TAG)\configure: dependencies\archives\Cbc-$(CBC_TAG).zip
+	$(UNZIP) -q -o -d dependencies\sources dependencies\archives\Cbc-$(CBC_TAG).zip
+
+dependencies\archives\Cbc-$(CBC_TAG).zip:
 	$(WGET) --quiet --continue -P dependencies\archives --no-check-certificate ${CBC_ARCHIVE} || (@echo wget failed to dowload $(CBC_ARCHIVE), try running '$(WGET) -P dependencies\archives --no-check-certificate $(CBC_ARCHIVE)' then rerun 'make third_party' && exit 1)
-	$(UNZIP) -q -d dependencies\sources dependencies\archives\Cbc-$(CBC_TAG).zip
 
 # This is needed to find Coin include files and libraries.
 COINUTILS_INC = /I"$(WINDOWS_COINUTILS_PATH)\\include" /I"$(WINDOWS_COINUTILS_PATH)\\include\\coin"
