@@ -206,7 +206,7 @@ dependencies/install/lib/zlib.lib: dependencies/sources/zlib-$(ZLIB_TAG)/zlib.h
 	$(COPY) dependencies$Ssources$Szlib-$(ZLIB_TAG)$Szlib.lib dependencies$Sinstall$Slib
 
 dependencies/sources/zlib-$(ZLIB_TAG)/zlib.h: dependencies/archives/zlib$(ZLIB_ARCHIVE_TAG).zip
-	$(UNZIP) -q -d dependencies$Ssources dependencies$Sarchives$Szlib$(ZLIB_ARCHIVE_TAG).zip
+	$(UNZIP) -q -o -d dependencies$Ssources dependencies$Sarchives$Szlib$(ZLIB_ARCHIVE_TAG).zip
 	-$(TOUCH) dependencies$Ssources$Szlib-$(ZLIB_TAG)$Szlib.h
 
 dependencies/archives/zlib$(ZLIB_ARCHIVE_TAG).zip:
@@ -236,7 +236,7 @@ dependencies/install/lib/gflags.lib: dependencies/sources/gflags-$(GFLAGS_TAG)
   "$(CMAKE)" --build build_cmake --target install
 
 dependencies/sources/gflags-$(GFLAGS_TAG): dependencies/archives/gflags-$(GFLAGS_TAG).zip | dependencies/sources
-	$(UNZIP) -q -d dependencies/sources dependencies\archives\gflags-$(GFLAGS_TAG).zip
+	$(UNZIP) -q -o -d dependencies/sources dependencies\archives\gflags-$(GFLAGS_TAG).zip
 	-$(TOUCH) dependencies\sources\gflags-$(GFLAGS_TAG)\INSTALL.md
 
 dependencies/archives/gflags-$(GFLAGS_TAG).zip:
@@ -270,7 +270,7 @@ dependencies/install/lib/glog.lib: dependencies/sources/glog-$(GLOG_TAG) install
   "$(CMAKE)" --build build_cmake --target install
 
 dependencies/sources/glog-$(GLOG_TAG): dependencies/archives/glog-$(GLOG_TAG).zip | dependencies/sources
-	$(UNZIP) -q -d dependencies/sources dependencies\archives\glog-$(GLOG_TAG).zip
+	$(UNZIP) -q -o -d dependencies/sources dependencies\archives\glog-$(GLOG_TAG).zip
 	-$(TOUCH) dependencies\sources\glog-$(GLOG_TAG)\CMakeLists.txt
 
 dependencies/archives/glog-$(GLOG_TAG).zip:
@@ -484,7 +484,7 @@ DEPENDENCIES_LNK += $(COIN_LNK)
 install_swig: dependencies/install/swigwin-$(SWIG_TAG)/swig.exe
 
 dependencies/install/swigwin-$(SWIG_TAG)/swig.exe: dependencies/archives/swigwin-$(SWIG_TAG).zip
-	$(UNZIP) -q -d dependencies$Sinstall dependencies$Sarchives$Sswigwin-$(SWIG_TAG).zip
+	$(UNZIP) -q -o -d dependencies$Sinstall dependencies$Sarchives$Sswigwin-$(SWIG_TAG).zip
 	$(TOUCH) dependencies$Sinstall$Sswigwin-$(SWIG_TAG)$Sswig.exe
 
 SWIG_ARCHIVE:=https://superb-dca2.dl.sourceforge.net/project/swig/swigwin/swigwin-$(SWIG_TAG)/swigwin-$(SWIG_TAG).zip
