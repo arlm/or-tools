@@ -34,8 +34,19 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UseSharedCompilation>false</UseSharedCompilation>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <BuildOutputTargetFolder>runtimes/$(RuntimeIdentifier)/lib</BuildOutputTargetFolder>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
+
+  <ItemGroup>
+      <_OutputPathItem Include="$(OutDir)"/>
+
+      <TfmSpecificPackageFile Include="@(_OutputPathItem->'%(FullPath)$(TargetName).dll')">
+        <PackagePath>runtimes/$(RuntimeIdentifier)/lib/$(TargetFramework)/%(_OutputPackItems.Filename)%(_OutputPackItems.Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="$([MSBuild]::NormalizePath($(TargetDir), 'ref', $(TargetFileName)))">
+        <PackagePath>ref/$(TargetFramework)/%(_OutputPackItems.Filename)%(_OutputPackItems.Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="../../gen/ortools/algorithms/*.cs">
