@@ -34,8 +34,19 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UseSharedCompilation>false</UseSharedCompilation>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <BuildOutputTargetFolder>runtimes/$(RuntimeIdentifier)/lib</BuildOutputTargetFolder>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
+
+  <ItemGroup>
+      <_OutputPathItem Include="$(OutDir)"/>
+
+      <TfmSpecificPackageFile Include="@(_OutputPathItem->'%(FullPath)$(TargetName).dll')" Condition=" $(TargetFramework) == 'net461' ">
+        <PackagePath>lib/$(TargetFramework)/%(_OutputPackItems.Filename)%(_OutputPackItems.Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="@(_OutputPathItem->'%(FullPath)$(TargetName).dll')" Condition=" $(TargetFramework) == 'netstandard2.0' ">
+        <PackagePath>runtimes/$(RuntimeIdentifier)/lib/%(_OutputPackItems.Filename)%(_OutputPackItems.Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="../../gen/ortools/algorithms/*.cs">
