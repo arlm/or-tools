@@ -27,6 +27,31 @@ fi
 # shellcheck disable=SC1090
 . "${DIR}/../Version.txt"
 
+# Manage OutputType(s)
+declare OUTPUT_TYPE
+if [[ $(dirname "$FILE") == examples/tests ]] ; then
+  OUTPUT_TYPE=$(cat <<EOF
+    <OutputType>Library</OutputType>
+EOF
+)
+else
+  OUTPUT_TYPE=$(cat <<EOF
+    <OutputType>Exe</OutputType>
+EOF
+)
+fi
+
+# Manage XUnit ShadowCopy problem
+declare XUNIT
+if [[ $(dirname "$FILE") == examples/tests ]] ; then
+  XUNIT=$(cat <<EOF
+    <None Include="App.config" />
+EOF
+)
+else
+  XUNIT=""
+fi
+
 # Manage PackageReference(s)
 declare DEPS
 if [[ $(dirname "$FILE") == examples/tests ]] ; then
@@ -50,9 +75,10 @@ fi
 cat >"$FILE_PROJ" <<EOL
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+${OUTPUT_TYPE}
 ${LANG_VERSION}
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <EnableDefaultItems>false</EnableDefaultItems>
     <RestoreSources>${PACKAGES_PATH};\$(RestoreSources);https://api.nuget.org/v3/index.json</RestoreSources>
     ${ASSEMBLY_NAME}
@@ -67,6 +93,7 @@ ${LANG_VERSION}
 
   <ItemGroup>
     <Compile Include="$SRC" />
+${XUNIT}
 ${DEPS}
   </ItemGroup>
 </Project>

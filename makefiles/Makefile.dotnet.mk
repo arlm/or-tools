@@ -429,15 +429,25 @@ endif
 
 .PHONY: build # Build a .Net C# program.
 build: $(SOURCE) $(SOURCE)proj $(DOTNET_ORTOOLS_NUPKG)
-	"$(DOTNET_BIN)" build $(SOURCE_PATH)proj
+	"$(DOTNET_BIN)" build --framework netcoreapp2.1 $(SOURCE_PATH)proj
+ifeq ($(SYSTEM),win)
+	"$(DOTNET_BIN)" build --framework net461 $(SOURCE_PATH)proj
+endif
 
 .PHONY: run # Run a .Net C# program (using 'dotnet run').
 run: build
-	"$(DOTNET_BIN)" run --no-build $(ARGS) --project $(SOURCE_PATH)proj
+	"$(DOTNET_BIN)" run --no-build $(ARGS) --framework netcoreapp2.1 --project $(SOURCE_PATH)proj
+ifeq ($(SYSTEM),win)
+	"$(DOTNET_BIN)" run --no-build $(ARGS) --framework net461 --project $(SOURCE_PATH)proj
+endif
 
 .PHONY: run_test # Run a .Net C# program (using 'dotnet test').
 run_test: build
-	"$(DOTNET_BIN)" test --blame --no-build $(ARGS) $(SOURCE_PATH)proj
+	"$(DOTNET_BIN)" test --blame --framework netcoreapp2.1 --no-build $(ARGS) $(SOURCE_PATH)proj
+ifeq ($(SYSTEM),win)
+	"$(DOTNET_BIN)" test --blame --framework net461 --no-build $(ARGS) $(SOURCE_PATH)proj
+endif
+
 endif
 
 # .Net F#
@@ -448,11 +458,18 @@ endif
 
 .PHONY: build # Build a .Net F# program.
 build: $(SOURCE) $(SOURCE)proj $(DOTNET_ORTOOLS_FSHARP_NUPKG)
-	"$(DOTNET_BIN)" build $(SOURCE_PATH)proj
+	"$(DOTNET_BIN)" build --framework netcoreapp2.1  $(SOURCE_PATH)proj
+ifeq ($(SYSTEM),win)
+	"$(DOTNET_BIN)" build --framework net461  $(SOURCE_PATH)proj
+endif
 
 .PHONY: run # Run a .Net F# program.
 run: build
-	"$(DOTNET_BIN)" run --no-build --project $(SOURCE_PATH)proj -- $(ARGS)
+	"$(DOTNET_BIN)" run --no-build --framework netcoreapp2.1 --project $(SOURCE_PATH)proj -- $(ARGS)
+ifeq ($(SYSTEM),win)
+	"$(DOTNET_BIN)" run --no-build --framework net461 --project $(SOURCE_PATH)proj -- $(ARGS)
+endif
+
 endif
 
 #############################
